@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 183 100% 95%;
+    --foreground: 183 5% 0%;
+    --card: 183 50% 90%;
+    --card-foreground: 183 5% 10%;
+    --popover: 183 100% 95%;
+    --popover-foreground: 183 100% 0%;
+    --primary: 183 58% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 183 30% 70%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 145 30% 85%;
+    --muted-foreground: 183 5% 35%;
+    --accent: 145 30% 80%;
+    --accent-foreground: 183 5% 10%;
+    --destructive: 0 100% 30%;
+    --destructive-foreground: 183 5% 90%;
+    --border: 183 30% 50%;
+    --input: 183 30% 18%;
+    --ring: 183 58% 48%;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 183 50% 5%;
+    --foreground: 183 5% 90%;
+    --card: 183 50% 0%;
+    --card-foreground: 183 5% 90%;
+    --popover: 183 50% 5%;
+    --popover-foreground: 183 5% 90%;
+    --primary: 183 58% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 183 30% 10%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 145 30% 15%;
+    --muted-foreground: 183 5% 60%;
+    --accent: 145 30% 15%;
+    --accent-foreground: 183 5% 90%;
+    --destructive: 0 100% 30%;
+    --destructive-foreground: 183 5% 90%;
+    --border: 183 30% 18%;
+    --input: 183 30% 18%;
+    --ring: 183 58% 48%;
+    --radius: 0.5rem;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 4s ease-in-out infinite;
+}
+
+.bg-mesh {
+  background-image: radial-gradient(at 40% 20%, hsla(28,100%,74%,0.2) 0px, transparent 50%),
+    radial-gradient(at 80% 0%, hsla(189,100%,56%,0.2) 0px, transparent 50%),
+    radial-gradient(at 0% 50%, hsla(355,100%,93%,0.2) 0px, transparent 50%),
+    radial-gradient(at 80% 50%, hsla(340,100%,76%,0.2) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, hsla(22,100%,77%,0.2) 0px, transparent 50%),
+    radial-gradient(at 80% 100%, hsla(242,100%,70%,0.2) 0px, transparent 50%),
+    radial-gradient(at 0% 0%, hsla(343,100%,76%,0.2) 0px, transparent 50%);
+}
