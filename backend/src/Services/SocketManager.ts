@@ -6,6 +6,7 @@ import { FileManager, type FileNodeType } from "./FileManager";
 
 interface CustomWebSocket extends WebSocket {
   id: string;
+  isAlive: boolean;
 }
 
 interface RoomType {
@@ -42,12 +43,27 @@ export default class SocketManager {
     this.wss.on("connection", (ws: CustomWebSocket, req) => {
       console.log("Connection Established!");
       ws.id = uuid();
+      ws.isAlive = true;
+
+      ws.on("pong", () => {
+        ws.isAlive = true;
+      });
 
       ws.on("message", (data: RawData) => {
         const message: SocketMessageType = JSON.parse(data.toString());
-
         this.performActions(ws, message);
       });
+
+      const interval = setInterval(() => {
+        if (!ws.isAlive) {
+          console.log("Connection lost, terminating...");
+          return ws.terminate();
+        }
+        ws.isAlive = false;
+        ws.ping();
+      }, 30000);
+
+      ws.on("close", () => clearInterval(interval));
     });
   }
 
@@ -83,9 +99,14 @@ export default class SocketManager {
     const type = message.type;
     const data = message.data;
 
+    console.log({ type, data });
+
     switch (type) {
       case SocketEvent.JOIN_REQUEST:
         this.handleJoinRequest(ws, data);
+        break;
+      case SocketEvent.REJOIN_REQUEST:
+        this.handleRejoin(ws, data);
         break;
       case SocketEvent.USER_LEFT:
         this.handleUserDisconnected(ws, data);
@@ -127,6 +148,30 @@ export default class SocketManager {
         console.warn(`Unhandled socket event: ${type}`);
         break;
     }
+  }
+
+  private handleRejoin(ws: CustomWebSocket, data: { user: RemoteUser }) {
+    const { user } = data;
+    const room = this.rooms.get(user.roomId);
+
+    //if room not found return;
+    if (!room) return;
+
+    //this ensures it removes the user if already exists and pushes it again
+    room?.users.filter((u) => u.socketId !== user.socketId).push(user);
+    this.rooms.set(user.roomId, room);
+
+    this.broadcastMessage(
+      user.roomId,
+      {
+        type: SocketEvent.JOIN_ACCEPTED,
+        data: {
+          user,
+          users: room.users,
+        },
+      },
+      ws
+    );
   }
 
   private handleJoinRequest(ws: CustomWebSocket, data: any) {
@@ -175,7 +220,6 @@ export default class SocketManager {
   private handleUserDisconnected(ws: CustomWebSocket, data: any) {
     const roomId = data.roomId;
     const user: RemoteUser = data.user;
-
     const room = this.rooms.get(roomId);
     const users = room
       ? room.users.filter((item) => item.socketId !== user.socketId)

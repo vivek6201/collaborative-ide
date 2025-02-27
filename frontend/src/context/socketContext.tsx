@@ -11,6 +11,8 @@ import {
 import { useApp } from "./appContext";
 import { RemoteUser, User, USER_STATUS } from "@/types/user";
 import { toast } from "sonner";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { usePathname, useRouter } from "next/navigation";
 
 interface ISocket {
   ws: WebSocket | null;
@@ -22,6 +24,7 @@ const SocketContext = createContext<ISocket | null>(null);
 const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const wsRef = useRef<WebSocket | null>(null);
   const initialized = useRef<boolean>(false);
+  const { setValue } = useLocalStorage();
   const {
     setUserStatus,
     setUsers,
@@ -29,12 +32,15 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     currentUserData,
     users,
   } = useApp();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleUserAccepted = useCallback(
     ({ user, users }: { user: User; users: RemoteUser[] }) => {
       setCurrentUserData(user);
       setUsers(users);
       setUserStatus(USER_STATUS.JOINED);
+      setValue("user", user);
       toast.success("Room Joined");
     },
     [setUserStatus, setUsers, setCurrentUserData]
@@ -75,20 +81,6 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-    event.preventDefault();
-    const isClosing = window.confirm("Are you sure?");
-    if (!isClosing || wsRef.current?.readyState !== WebSocket.OPEN) return;
-    sendMessage({
-      type: SocketEvent.USER_LEFT,
-      data: {
-        roomId: currentUserData?.roomId,
-        user: users.find((item) => currentUserData?.username === item.username),
-      },
-    });
-    wsRef.current.close();
-  };
-
   useEffect(() => {
     if (initialized.current) return;
     initialized.current = true;
@@ -100,27 +92,11 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       wsRef.current = ws;
     };
 
-    ws.onclose = () => {
-      if (ws.readyState === WebSocket.OPEN) {
-        sendMessage({
-          type: SocketEvent.USER_LEFT,
-          data: {
-            roomId: currentUserData?.roomId,
-            user: users.find(
-              (item) => currentUserData?.username === item.username
-            ),
-          },
-        });
-      }
-    };
-
     ws.addEventListener("message", handleMessage);
-    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      ws.close();
       ws.removeEventListener("message", handleMessage);
-      window.removeEventListener("beforeunload", handleBeforeUnload);
+      ws.close();
       initialized.current = false;
     };
   }, []);

@@ -1,6 +1,10 @@
 "use client";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import CodeMirror, { Extension, scrollPastEnd, ViewUpdate } from "@uiw/react-codemirror";
+import CodeMirror, {
+  Extension,
+  scrollPastEnd,
+  ViewUpdate,
+} from "@uiw/react-codemirror";
 import { useTheme } from "next-themes";
 import { useApp } from "@/context/appContext";
 import { ITab } from "@/types/app";
@@ -13,6 +17,7 @@ import useUserActivity from "@/hooks/useUserActivity";
 import { cursorTooltipBaseTheme, tooltipField } from "./tooltip";
 import { hyperLink } from "@uiw/codemirror-extensions-hyper-link";
 import { color } from "@uiw/codemirror-extensions-color";
+import usePageEvents from "@/hooks/usePageEvents";
 
 const CodeEditor = () => {
   const { theme } = useTheme();
@@ -23,9 +28,10 @@ const CodeEditor = () => {
     () => users.filter((u) => u.username !== currentUserData?.username),
     [users, currentUserData]
   );
-  const [extensions, setExtensions] = useState<Extension[]>([])
+  const [extensions, setExtensions] = useState<Extension[]>([]);
 
   useUserActivity();
+  usePageEvents();
 
   const handleCodeChange = (code: string, view: ViewUpdate) => {
     if (!activeTab) return;

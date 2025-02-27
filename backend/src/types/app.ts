@@ -1,5 +1,6 @@
 export enum SocketEvent {
   JOIN_REQUEST = "join-request",
+  REJOIN_REQUEST = "rejoin-request",
   JOIN_ACCEPTED = "join-accepted",
   USER_JOINED = "user-joined",
   USER_DISCONNECTED = "user-disconnected",

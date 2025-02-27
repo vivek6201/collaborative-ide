@@ -8,8 +8,8 @@ import {
 import Navigator from "../sidebar/Navigator";
 import CodeEditor from "./CodeEditor";
 import Sidebar from "../sidebar";
+import { useRouter } from "next/navigation";
 import { useApp } from "@/context/appContext";
-import { redirect, useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 const Ide = () => {
@@ -22,7 +22,6 @@ const Ide = () => {
       toast.error("Username is required!");
     }
   }, [currentUserData, router]);
-
   return (
     <ResizablePanelGroup
       direction="horizontal"
