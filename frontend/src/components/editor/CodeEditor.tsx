@@ -93,12 +93,12 @@ const CodeEditor = () => {
           />
         </div>
       ) : (
-        <div className="bg-gray-800 w-full h-full flex items-center justify-center">
+        <div className="bg-gray-300 dark:bg-gray-800 w-full h-full flex items-center justify-center">
           <p className="uppercase font-bold text-xl">No File Selected</p>
         </div>
       )}
     </div>
-  );
+  )
 };
 
 export default CodeEditor;

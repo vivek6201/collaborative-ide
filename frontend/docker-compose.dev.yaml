@@ -1,0 +1,21 @@
+version: "3"
+services:
+  app:
+    image: ide-frontend
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+      - /app/node_modules  # Prevents overwriting node_modules
+    ports:
+      - "3000:3000"
+    env_file:
+      - ${ENV_FILE:-.env} 
+    environment:
+      - NODE_ENV=development
+      - TURBO_NO_WATCH="1"  # Disable default watcher
+      - NEXT_TURBOPACK=1  # Enable Turbopack
+      - WATCHPACK_POLLING=true  # Ensure file changes are detected
+      - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_PORT=0  # Fixes Webpack issues

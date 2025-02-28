@@ -85,7 +85,7 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     if (initialized.current) return;
     initialized.current = true;
 
-    const ws = new WebSocket(SOCKET_URL);
+    const ws = new WebSocket(SOCKET_URL as string);
 
     ws.onopen = () => {
       console.log("WebSocket connection established");

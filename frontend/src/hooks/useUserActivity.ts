@@ -2,7 +2,7 @@ import { useApp } from "@/context/appContext";
 import { useSocket } from "@/context/socketContext";
 import { SocketEvent, SocketMessageType } from "@/types/socket";
 import { RemoteUser } from "@/types/user";
-import { act, useCallback, useEffect } from "react";
+import { useCallback, useEffect } from "react";
 
 const useUserActivity = () => {
   const socket = useSocket();

@@ -1,0 +1,14 @@
+version: "3"
+services:
+  app:
+    image: ide-backend
+    build:
+      context: .
+      target: prod
+    ports:
+      - "4001:4001"
+    env_file:
+      - ${ENV_FILE:-.env}
+    environment:
+      - NODE_ENV=production
+    restart: always

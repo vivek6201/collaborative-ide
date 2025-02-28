@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node dist/index.js",
     "build": "tsc -b",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "docker:dev": "tsc -b && node dist/index.js"
   },
   "keywords": [],
   "author": "",
