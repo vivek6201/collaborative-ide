@@ -31,7 +31,6 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentUserData,
     users,
     setMessages,
-    messages,
   } = useApp();
 
   const handleUserAccepted = useCallback(
