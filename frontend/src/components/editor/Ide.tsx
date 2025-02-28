@@ -11,10 +11,13 @@ import Sidebar from "../sidebar";
 import { useRouter } from "next/navigation";
 import { useApp } from "@/context/appContext";
 import { toast } from "sonner";
+import useWindowDimensions from "@/hooks/useWindowDimensions";
+import MobileIde from "./MobileIde";
 
 const Ide = () => {
-  const { currentUserData } = useApp();
+  const { currentUserData, isSidebar } = useApp();
   const router = useRouter();
+  const { isMobile } = useWindowDimensions();
 
   React.useEffect(() => {
     if (!currentUserData) {
@@ -22,14 +25,23 @@ const Ide = () => {
       toast.error("Username is required!");
     }
   }, [currentUserData, router]);
+
+  if (isMobile) {
+    return <MobileIde />;
+  }
+
   return (
     <ResizablePanelGroup
       direction="horizontal"
       className="w-full h-full overflow-hidden"
     >
-      <ResizablePanel minSize={20} defaultSize={20} className="flex">
+      <ResizablePanel
+        minSize={20}
+        defaultSize={20}
+        className="flex min-w-[300px]"
+      >
         <Navigator />
-        <Sidebar />
+        {isSidebar ? <Sidebar /> : null}
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel minSize={50} defaultSize={80} className="w-full h-full">

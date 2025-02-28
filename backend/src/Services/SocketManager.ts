@@ -99,8 +99,6 @@ export default class SocketManager {
     const type = message.type;
     const data = message.data;
 
-    console.log({ type, data });
-
     switch (type) {
       case SocketEvent.JOIN_REQUEST:
         this.handleJoinRequest(ws, data);

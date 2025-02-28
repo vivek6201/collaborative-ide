@@ -8,8 +8,8 @@ import {
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
-export const SOCKET_URL = "ws://localhost:4001";
-export const judgeUrl = "https://judge.codershub.live";
+export const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL;
+export const judgeUrl = process.env.NEXT_PUBLIC_JUDGE_URL;
 
 export interface TabItem {
   name: string;

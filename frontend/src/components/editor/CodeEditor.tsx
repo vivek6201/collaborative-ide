@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import CodeMirror, {
   Extension,
   scrollPastEnd,
@@ -8,9 +8,6 @@ import CodeMirror, {
 import { useTheme } from "next-themes";
 import { useApp } from "@/context/appContext";
 import { ITab } from "@/types/app";
-import { Button } from "../ui/button";
-import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { useSocket } from "@/context/socketContext";
 import { SocketEvent, SocketMessageType } from "@/types/socket";
 import useUserActivity from "@/hooks/useUserActivity";
@@ -18,6 +15,8 @@ import { cursorTooltipBaseTheme, tooltipField } from "./tooltip";
 import { hyperLink } from "@uiw/codemirror-extensions-hyper-link";
 import { color } from "@uiw/codemirror-extensions-color";
 import usePageEvents from "@/hooks/usePageEvents";
+import OpenTabs from "./OpenTabs";
+import useResponsive from "@/hooks/useResponsive";
 
 const CodeEditor = () => {
   const { theme } = useTheme();
@@ -29,6 +28,7 @@ const CodeEditor = () => {
     [users, currentUserData]
   );
   const [extensions, setExtensions] = useState<Extension[]>([]);
+  const { viewHeight } = useResponsive();
 
   useUserActivity();
   usePageEvents();
@@ -78,21 +78,20 @@ const CodeEditor = () => {
   }, []);
 
   return (
-    <div className="w-full h-full ">
-      <div className="flex gap-2 items-center">
-        {tabs.map((item) => (
-          <Tab data={item} key={item.id} />
-        ))}
-      </div>
+    <div className={`w-full h-full`}>
+      <OpenTabs />
+
       {tabs.length > 0 ? (
-        <CodeMirror
-          className="w-full h-full"
-          theme={theme === "dark" ? "dark" : "light"}
-          minHeight="100%"
-          value={activeTab?.content}
-          onChange={handleCodeChange}
-          extensions={extensions}
-        />
+        <div className="w-full h-full">
+          <CodeMirror
+            className="w-full h-full overflow-y-auto"
+            theme={theme === "dark" ? "dark" : "light"}
+            value={activeTab?.content}
+            onChange={handleCodeChange}
+            extensions={extensions}
+            maxHeight={`${viewHeight}px`}
+          />
+        </div>
       ) : (
         <div className="bg-gray-800 w-full h-full flex items-center justify-center">
           <p className="uppercase font-bold text-xl">No File Selected</p>
@@ -101,58 +100,5 @@ const CodeEditor = () => {
     </div>
   );
 };
-
-function Tab({ data }: { data: ITab }) {
-  const { setTabs, activeTab, setActiveTab } = useApp();
-
-  const removeFromTabs = () => {
-    setTabs((tabs) => {
-      const newTabs = tabs.filter((item) => item.id !== data.id);
-      if (activeTab?.id === data.id) {
-        const currentIndex = tabs.findIndex((item) => item.id === data.id);
-        const newActiveTab = newTabs[currentIndex - 1] || newTabs[0] || null;
-        setActiveTab(newActiveTab);
-      }
-      return newTabs;
-    });
-  };
-
-  const changeActiveTab = () => {
-    setActiveTab(data);
-  };
-
-  return (
-    <div
-      className={cn(
-        "rounded-t-lg px-5 py-3 flex justify-between items-center cursor-pointer relative",
-        activeTab?.id === data.id ? "bg-gray-800" : ""
-      )}
-      onClick={changeActiveTab}
-    >
-      {activeTab?.id == data.id ? (
-        <div className="bg-blue-700 h-[0.2rem] absolute top-0 left-0 right-0" />
-      ) : null}
-      <p
-        className={cn(
-          "opacity-70 ",
-          activeTab?.id === data.id ? "opacity-100" : ""
-        )}
-      >
-        {data.name}
-      </p>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="w-5 h-5"
-        onClick={(e) => {
-          e.stopPropagation();
-          removeFromTabs();
-        }}
-      >
-        <X />
-      </Button>
-    </div>
-  );
-}
 
 export default CodeEditor;

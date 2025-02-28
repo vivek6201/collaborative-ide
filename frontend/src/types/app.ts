@@ -13,6 +13,8 @@ export interface IApp {
   tabs: ITab[];
   setTabs: React.Dispatch<React.SetStateAction<ITab[]>>;
   activeTab: ITab | null;
+  isSidebar: boolean;
+  setIsSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveTab: React.Dispatch<React.SetStateAction<ITab | null>>;
 }
 

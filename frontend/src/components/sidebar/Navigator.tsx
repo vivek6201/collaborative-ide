@@ -15,9 +15,15 @@ import { Icon } from "../ui/icon";
 import { LucideProps, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useApp } from "@/context/appContext";
+import useWindowDimensions from "@/hooks/useWindowDimensions";
 
 const Navigator = () => {
   const { theme, setTheme } = useTheme();
+  const { isMobile } = useWindowDimensions();
+
+  if (isMobile) {
+    return <MobileNavigator />;
+  }
 
   return (
     <div className="w-[60px] h-full border-r border-gray-300 dark:border-gray-800 flex flex-col gap-y-2 py-2 items-center justify-between">
@@ -39,6 +45,16 @@ const Navigator = () => {
 
 export default Navigator;
 
+function MobileNavigator() {
+  return (
+    <div className="h-full w-full flex gap-3 items-center justify-between px-5 max-w-[500px] mx-auto">
+      {Tabs.map((item, index) => (
+        <CustomButton item={item} key={index} />
+      ))}
+    </div>
+  );
+}
+
 function CustomButton({
   item,
 }: {
@@ -49,7 +65,16 @@ function CustomButton({
     >;
   };
 }) {
-  const { currSideView, setCurrSideView } = useApp();
+  const { currSideView, setCurrSideView, setIsSidebar } = useApp();
+  const { isMobile } = useWindowDimensions();
+
+  const handleAction = () => {
+    if (currSideView === item) {
+      setIsSidebar((prev) => !prev);
+    } else {
+      setCurrSideView(item);
+    }
+  };
 
   return (
     <TooltipProvider>
@@ -58,12 +83,12 @@ function CustomButton({
           <Button
             variant={currSideView.name === item.name ? "secondary" : "ghost"}
             size={"icon"}
-            onClick={() => setCurrSideView(item)}
+            onClick={handleAction}
           >
             <Icon name={item.icon} size={22} />
           </Button>
         </TooltipTrigger>
-        <TooltipContent side="right">
+        <TooltipContent side={isMobile ? "top" : "right"}>
           <p>{item.name}</p>
         </TooltipContent>
       </Tooltip>

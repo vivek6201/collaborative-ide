@@ -8,7 +8,7 @@ import React from "react";
 const ChatView = () => {
   return (
     <div className="grid grid-rows-[95%_1fr] gap-y-2 h-[calc(100%-1.8rem)] p-2">
-      <div className="border rounded-md bg-gray-800 ">
+      <div className=" rounded-md dark:bg-gray-900 bg-gray-300">
         
       </div>
       <div className="flex gap-2 items-center h-full">

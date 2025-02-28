@@ -14,7 +14,6 @@ import { Users, KeyRound, Sparkles, Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Icon } from "../ui/icon";
 import { useSocket } from "@/context/socketContext";
-import { useApp } from "@/context/appContext";
 import { SocketEvent } from "@/types/socket";
 import { toast } from "sonner";
 

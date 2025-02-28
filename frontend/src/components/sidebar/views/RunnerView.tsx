@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -23,9 +23,13 @@ const RunnerView = () => {
     if (!activeTab) return;
     try {
       setLoading(true);
-      const { data } = await runCodeAction(activeTab);
+      const { data, success } = await runCodeAction(activeTab);
       setActiveTab((prev) => (prev ? { ...prev, output: data } : prev));
-      toast.success("Code Executed Successfully");
+      if (success) {
+        toast.success("Code Executed Successfully");
+      } else {
+        toast.error("Code Execution Failed");
+      }
     } catch (error) {
       console.error(error);
       toast.error("Failed to run code");

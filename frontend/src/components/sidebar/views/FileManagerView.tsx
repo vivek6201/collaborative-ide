@@ -145,7 +145,7 @@ function TreeNode({
           <ContextMenu>
             <ContextMenuTrigger>
               <div
-                className="flex gap-2 items-center hover:bg-gray-900 cursor-pointer"
+                className="flex gap-2 items-center hover:dark:bg-gray-900 cursor-pointer py-1"
                 onClick={() => setExpanded(!expanded)}
               >
                 <Icon name={expanded ? FolderOpen : Folder} />
@@ -184,8 +184,8 @@ function TreeNode({
           <ContextMenuTrigger>
             <div
               className={cn(
-                "flex gap-2 items-center hover:bg-gray-900 cursor-pointer",
-                activeTab?.id === node.id ? "bg-gray-700 hover:bg-gray-700" : ""
+                "flex gap-2 items-center hover:dark:bg-gray-900 hover:bg-gray-200 cursor-pointer",
+                activeTab?.id === node.id ? "bg-gray-300 hover:bg-gray-300 dark:bg-gray-700 hover:dark:bg-gray-700" : ""
               )}
               onClick={pushToTabs}
             >

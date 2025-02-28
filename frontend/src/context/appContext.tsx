@@ -2,7 +2,7 @@
 
 import { Tabs as View } from "@/lib/constants";
 import { IApp, ITab } from "@/types/app";
-import { CONNECTION_STATUS, RemoteUser, User, USER_STATUS } from "@/types/user";
+import { RemoteUser, User, USER_STATUS } from "@/types/user";
 import { createContext, useContext, useState } from "react";
 
 const AppContext = createContext<IApp | null>(null);
@@ -16,6 +16,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [currSideView, setCurrSideView] = useState(View[0]);
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [activeTab, setActiveTab] = useState<ITab | null>(null);
+  const [isSidebar, setIsSidebar] = useState(true);
 
   return (
     <AppContext.Provider
@@ -32,6 +33,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setTabs,
         activeTab,
         setActiveTab,
+        isSidebar,
+        setIsSidebar,
       }}
     >
       {children}

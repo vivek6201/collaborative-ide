@@ -18,7 +18,6 @@ export const copyContent = async (content: string) => {
 
 export const getFileIcon = (name: string) => {
   switch (name) {
-
   }
 };
 
@@ -34,5 +33,7 @@ export const getLanguageId = (lang: string) => {
       return 62;
     case "js":
       return 63;
+    case "ts":
+      return 74;
   }
 };
