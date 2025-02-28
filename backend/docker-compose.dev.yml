@@ -1,7 +1,7 @@
 version: "3"
 services:
   app:
-    image: ide-backend
+    image: vivek6201/judge-ide-backend
     build:
       context: .
       target: dev
