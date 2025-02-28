@@ -1,6 +1,5 @@
 "use client";
 
-import useResponsive from "@/hooks/useResponsive";
 import React from "react";
 import Navigator from "../sidebar/Navigator";
 import CodeEditor from "./CodeEditor";

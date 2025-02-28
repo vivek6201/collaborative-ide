@@ -52,11 +52,12 @@ const runCodeAction = async (data: ITab) => {
       success: true,
       data: result,
     };
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
     return {
       success: false,
       message: "Failed to create the submission",
+      // @ts-expect-error: Handle error response which may not always have the expected structure
       error: error.response?.data || error.message,
     };
   }

@@ -21,5 +21,6 @@ export enum SocketEvent {
 
 export type SocketMessageType = {
   type: SocketEvent;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
 };

@@ -17,7 +17,7 @@ const useLocalStorage = () => {
       const item = window.localStorage.getItem(key);
       acc[key] = isJSON(item) ? JSON.parse(item!) : item;
       return acc;
-    }, {} as Record<string, any>);
+    }, {} as Record<string, object | string | number>);
     return allValues;
   });
 
@@ -31,7 +31,7 @@ const useLocalStorage = () => {
     }
   };
 
-  const setValue = (key: string, value: any) => {
+  const setValue = (key: string, value: object | string | number) => {
     try {
       const valueToStore =
         value instanceof Function ? value(storedValue[key]) : value;

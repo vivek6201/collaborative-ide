@@ -9,7 +9,7 @@ import { useTheme } from "next-themes";
 import { useApp } from "@/context/appContext";
 import { ITab } from "@/types/app";
 import { useSocket } from "@/context/socketContext";
-import { SocketEvent, SocketMessageType } from "@/types/socket";
+import { SocketEvent } from "@/types/socket";
 import useUserActivity from "@/hooks/useUserActivity";
 import { cursorTooltipBaseTheme, tooltipField } from "./tooltip";
 import { hyperLink } from "@uiw/codemirror-extensions-hyper-link";

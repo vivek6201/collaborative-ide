@@ -12,6 +12,7 @@ import React, { useState } from "react";
 const SettingView = () => {
   const { theme } = useTheme();
   const [fontSize, setFontSize] = useState(14);
+  console.log(fontSize);
   return (
     <div className="p-5">
       <div className="flex gap-2 flex-col">

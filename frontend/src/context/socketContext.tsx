@@ -12,7 +12,6 @@ import { useApp } from "./appContext";
 import { RemoteUser, User, USER_STATUS } from "@/types/user";
 import { toast } from "sonner";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { usePathname, useRouter } from "next/navigation";
 
 interface ISocket {
   ws: WebSocket | null;
@@ -29,11 +28,8 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     setUserStatus,
     setUsers,
     setCurrentUserData,
-    currentUserData,
     users,
   } = useApp();
-  const router = useRouter();
-  const pathname = usePathname();
 
   const handleUserAccepted = useCallback(
     ({ user, users }: { user: User; users: RemoteUser[] }) => {
