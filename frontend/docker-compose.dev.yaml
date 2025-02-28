@@ -16,7 +16,7 @@ services:
     ports:
       - "3000:3000"
     env_file:
-      - ${ENV_FILE:-.env} 
+      - ${ENV_FILE:-.env.local} 
     environment:
       - NODE_ENV=development
       - TURBO_NO_WATCH="1"  # Disable default watcher
