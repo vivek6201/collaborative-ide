@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs as View } from "@/lib/constants";
-import { IApp, ITab } from "@/types/app";
+import { IApp, IChatMessage, ITab } from "@/types/app";
 import { RemoteUser, User, USER_STATUS } from "@/types/user";
 import { createContext, useContext, useState } from "react";
 
@@ -17,6 +17,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [activeTab, setActiveTab] = useState<ITab | null>(null);
   const [isSidebar, setIsSidebar] = useState(true);
+  const [messages, setMessages] = useState<IChatMessage[]>([]);
 
   return (
     <AppContext.Provider
@@ -35,6 +36,8 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
         setActiveTab,
         isSidebar,
         setIsSidebar,
+        messages,
+        setMessages,
       }}
     >
       {children}

@@ -13,6 +13,15 @@ interface RoomType {
   users: RemoteUser[];
   fileManager: FileManager;
   files: FileNodeType;
+  chats: IChatMessage[];
+}
+
+export interface IChatMessage {
+  from: RemoteUser;
+  message: {
+    text: string;
+    timestamp: Date;
+  };
 }
 
 export default class SocketManager {
@@ -61,9 +70,11 @@ export default class SocketManager {
         }
         ws.isAlive = false;
         ws.ping();
-      }, 30000);
+      }, 5000);
 
-      ws.on("close", () => clearInterval(interval));
+      ws.on("close", () => {
+        clearInterval(interval);
+      });
     });
   }
 
@@ -133,9 +144,6 @@ export default class SocketManager {
       case SocketEvent.SEND_MESSAGE:
         this.handleSendMessage(ws, data);
         break;
-      case SocketEvent.RECEIVE_MESSAGE:
-        this.handleReceiveMessage(ws, data);
-        break;
       case SocketEvent.TYPING_START:
         this.handleTypingStart(ws, data);
         break;
@@ -184,6 +192,7 @@ export default class SocketManager {
         users: [],
         fileManager,
         files: fileManager.getFileStructure()!,
+        chats: [],
       };
       this.rooms.set(roomId, room);
     }
@@ -369,12 +378,37 @@ export default class SocketManager {
     // Handle user online logic
   }
 
-  private handleSendMessage(ws: CustomWebSocket, data: any) {
-    // Handle send message logic
-  }
+  private handleSendMessage(
+    ws: CustomWebSocket,
+    data: {
+      roomId: string;
+      messageData: IChatMessage;
+    }
+  ) {
+    const { roomId, messageData } = data;
 
-  private handleReceiveMessage(ws: CustomWebSocket, data: any) {
-    // Handle receive message logic
+    const room = this.rooms.get(roomId);
+
+    if (!room) return;
+
+    const chatMessage: IChatMessage = {
+      from: messageData.from,
+      message: {
+        text: messageData.message.text,
+        timestamp: messageData.message.timestamp,
+      },
+    };
+
+    room.chats.push(chatMessage);
+
+    this.broadcastMessage(
+      roomId,
+      {
+        type: SocketEvent.RECEIVE_MESSAGE,
+        data: chatMessage,
+      },
+      ws
+    );
   }
 
   private handleTypingStart(

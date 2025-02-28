@@ -12,6 +12,7 @@ import { useApp } from "./appContext";
 import { RemoteUser, User, USER_STATUS } from "@/types/user";
 import { toast } from "sonner";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { IChatMessage } from "@/types/app";
 
 interface ISocket {
   ws: WebSocket | null;
@@ -29,6 +30,8 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     setUsers,
     setCurrentUserData,
     users,
+    setMessages,
+    messages,
   } = useApp();
 
   const handleUserAccepted = useCallback(
@@ -61,6 +64,13 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     [setUsers]
   );
 
+  const handleReceiveMessage = useCallback(
+    (message: IChatMessage) => {
+      setMessages((prev) => [...prev, message]);
+    },
+    [setMessages]
+  );
+
   const handleMessage = (event: MessageEvent) => {
     const message: SocketMessageType = JSON.parse(event.data);
 
@@ -74,6 +84,8 @@ const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       case SocketEvent.USER_JOINED:
         handleUserJoined(message.data);
         break;
+      case SocketEvent.RECEIVE_MESSAGE:
+        handleReceiveMessage(message.data);
     }
   };
 

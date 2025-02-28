@@ -14,6 +14,8 @@ export interface IApp {
   setTabs: React.Dispatch<React.SetStateAction<ITab[]>>;
   activeTab: ITab | null;
   isSidebar: boolean;
+  messages: IChatMessage[];
+  setMessages: React.Dispatch<React.SetStateAction<IChatMessage[]>>;
   setIsSidebar: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveTab: React.Dispatch<React.SetStateAction<ITab | null>>;
 }
@@ -39,4 +41,12 @@ export interface ITab {
   content: string;
   input: string;
   output: IOutput | null;
+}
+
+export interface IChatMessage {
+  from: RemoteUser;
+  message: {
+    text: string;
+    timestamp: Date;
+  };
 }
